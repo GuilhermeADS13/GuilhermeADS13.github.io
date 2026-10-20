@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Guilherme Maciel · Desenvolvedor Full Stack</title>
+<meta name="description" content="Portfólio de Guilherme Maciel, desenvolvedor full stack em Recife. Projetos com IA generativa (LLMs e RAG), automação com n8n, IoT com ESP32 e aplicações web em tempo real." />
+<meta name="theme-color" content="#2F5BEA" />
+<meta property="og:title" content="Guilherme Maciel · Desenvolvedor Full Stack" />
+<meta property="og:description" content="Do sensor ao dashboard, do PDF à peça jurídica. Projetos com IA, automação, IoT e web." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="foto.jpg" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%232F5BEA'/%3E%3Ctext x='50%25' y='56%25' text-anchor='middle' dominant-baseline='middle' font-family='Arial' font-weight='700' font-size='30' fill='white'%3EGM%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #EEF2F7;
+    --surface: #FFFFFF;
+    --surface-2: #F6F8FB;
+    --ink: #13213B;
+    --muted: #55627A;
+    --line: #D3DBE7;
+    --accent: #2F5BEA;
+    --accent-soft: #DDE5FD;
+    --on-accent: #FFFFFF;
+    --led: #E8941A;
+    --shadow: 0 1px 2px rgba(19, 33, 59, .06), 0 12px 32px -18px rgba(19, 33, 59, .35);
+    --radius-l: 22px;
+    --radius-m: 16px;
+    --wrap: 1120px;
+    --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+    --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0D1524;
+      --surface: #142036;
+      --surface-2: #18263F;
+      --ink: #E7EDF8;
+      --muted: #9AA8BF;
+      --line: #263450;
+      --accent: #7090FF;
+      --accent-soft: #1F2E57;
+      --on-accent: #0D1524;
+      --led: #F4B04A;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 16px 40px -20px rgba(0, 0, 0, .7);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0D1524;
+    --surface: #142036;
+    --surface-2: #18263F;
+    --ink: #E7EDF8;
+    --muted: #9AA8BF;
+    --line: #263450;
+    --accent: #7090FF;
+    --accent-soft: #1F2E57;
+    --on-accent: #0D1524;
+    --led: #F4B04A;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 16px 40px -20px rgba(0, 0, 0, .7);
+    color-scheme: dark;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 400 1.0625rem/1.65 var(--body);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+  .wrap { width: min(var(--wrap), 100% - 32px); margin-inline: auto; }
+  .skip { position: absolute; left: -999px; top: 8px; background: var(--accent); color: var(--on-accent); padding: 8px 14px; border-radius: 10px; z-index: 50; }
+  .skip:focus { left: 16px; }
+
+  /* Top bar */
+  .bar {
+    position: sticky; top: 0; z-index: 20;
+    backdrop-filter: saturate(1.4) blur(14px);
+    -webkit-backdrop-filter: saturate(1.4) blur(14px);
+    background: color-mix(in srgb, var(--bg) 78%, transparent);
+    border-bottom: 1px solid transparent;
+    transition: border-color .3s ease;
+  }
+  .bar.scrolled { border-bottom-color: var(--line); }
+  .bar .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 16px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; white-space: nowrap; font: 700 1.05rem/1 var(--display); letter-spacing: -.01em; }
+  .brand img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 2px solid var(--surface); box-shadow: 0 0 0 1px var(--line); }
+  .nav { display: flex; align-items: center; gap: 4px; }
+  .nav a { text-decoration: none; color: var(--muted); font-weight: 500; font-size: .95rem; padding: 8px 12px; border-radius: 999px; transition: color .2s, background-color .2s; }
+  .nav a:hover { color: var(--ink); background: var(--surface); }
+  .theme-btn {
+    width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface);
+    color: var(--ink); display: grid; place-items: center; cursor: pointer; margin-left: 6px;
+  }
+  .theme-btn svg { width: 18px; height: 18px; }
+  @media (max-width: 640px) { .nav a.opt { display: none; } }
+
+  /* Hero */
+  .hero { padding: clamp(56px, 10vw, 120px) 0 clamp(40px, 7vw, 80px); }
+  .status { display: inline-flex; align-items: center; gap: 10px; font-weight: 500; color: var(--muted); font-size: .95rem; margin: 0 0 22px; }
+  .status .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--led); box-shadow: 0 0 0 0 color-mix(in srgb, var(--led) 60%, transparent); animation: ping 2.4s ease-out infinite; }
+  @keyframes ping { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--led) 55%, transparent); } 70%, 100% { box-shadow: 0 0 0 12px transparent; } }
+  .hero h1 {
+    font: 800 clamp(2.5rem, 7.2vw, 5.6rem)/.98 var(--display);
+    letter-spacing: -.035em;
+    margin: 0;
+    max-width: 14ch;
+    font-variation-settings: "opsz" 96;
+  }
+  .hero h1 .line { display: block; overflow: hidden; padding-bottom: .06em; }
+  .hero h1 .line > span { display: inline-block; transform: translateY(105%); animation: rise .9s cubic-bezier(.2, .8, .2, 1) forwards; }
+  .hero h1 .line:nth-child(2) > span { animation-delay: .12s; color: var(--muted); }
+  @keyframes rise { to { transform: none; } }
+  .lede { margin: 28px 0 0; max-width: 58ch; font-size: clamp(1.05rem, 1.6vw, 1.2rem); color: var(--muted); opacity: 0; animation: fade .8s .45s ease forwards; }
+  .lede strong { color: var(--ink); font-weight: 600; }
+  @keyframes fade { to { opacity: 1; } }
+  .ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; opacity: 0; animation: fade .8s .6s ease forwards; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 600; font-size: 1rem;
+    padding: 14px 22px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+    transition: transform .25s cubic-bezier(.2, .8, .2, 1), background-color .2s, border-color .2s;
+  }
+  .btn:hover { transform: translateY(-2px); border-color: var(--accent); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+  .btn svg { width: 18px; height: 18px; flex: none; }
+
+  /* Signal flow: the one orchestrated moment */
+  .flow { margin-top: clamp(48px, 8vw, 88px); position: relative; }
+  .flow-track { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); }
+  .wire { position: absolute; left: 12.5%; right: 12.5%; top: 21px; height: 2px; background: var(--line); border-radius: 2px; overflow: hidden; }
+  .wire::before { content: ""; position: absolute; inset: 0; background: var(--accent); transform-origin: left; transform: scaleX(0); animation: draw 1.6s .8s cubic-bezier(.65, 0, .35, 1) forwards; }
+  .pulse { position: absolute; top: 16px; left: 12.5%; width: 12px; height: 12px; margin-left: -6px; border-radius: 50%; background: var(--led); box-shadow: 0 0 14px 2px color-mix(in srgb, var(--led) 70%, transparent); opacity: 0; animation: travel 3.2s 2.6s cubic-bezier(.45, 0, .55, 1) infinite; }
+  @keyframes draw { to { transform: scaleX(1); } }
+  @keyframes travel { 0% { left: 12.5%; opacity: 0; } 8% { opacity: 1; } 85% { opacity: 1; } 100% { left: 87.5%; opacity: 0; } }
+  .node { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; position: relative; z-index: 1; }
+  .node .ring {
+    width: 44px; height: 44px; border-radius: 50%; background: var(--surface); border: 2px solid var(--line);
+    display: grid; place-items: center; color: var(--muted);
+    animation: lit .4s ease forwards; animation-delay: var(--d);
+  }
+  .node .ring svg { width: 20px; height: 20px; }
+  @keyframes lit { to { border-color: var(--accent); color: var(--accent); } }
+  .node b { font: 700 clamp(.85rem, 1.6vw, 1.05rem)/1.2 var(--display); }
+  .node small { display: block; color: var(--muted); font-size: clamp(.72rem, 1.3vw, .88rem); line-height: 1.35; max-width: 20ch; }
+
+  /* Sections */
+  section { scroll-margin-top: 72px; }
+  .block { padding: clamp(64px, 9vw, 112px) 0; }
+  .block-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: clamp(28px, 4vw, 44px); }
+  .block-head h2 { font: 800 clamp(2rem, 4.6vw, 3.2rem)/1.02 var(--display); letter-spacing: -.03em; margin: 0; }
+  .block-head p { margin: 0; color: var(--muted); max-width: 46ch; }
+
+  /* Featured projects */
+  .grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 18px; }
+  .card {
+    grid-column: span 2;
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-m);
+    padding: 26px; display: flex; flex-direction: column; gap: 14px; box-shadow: var(--shadow);
+    position: relative; isolation: isolate;
+    transition: transform .35s cubic-bezier(.2, .8, .2, 1), border-color .25s;
+  }
+  .card:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--accent) 55%, var(--line)); }
+  .card.half { grid-column: span 3; }
+  .card.lead {
+    grid-column: 1 / -1; border-radius: var(--radius-l); padding: clamp(28px, 4vw, 44px);
+    display: grid; grid-template-columns: 1.25fr 1fr; gap: clamp(24px, 4vw, 48px); align-items: center;
+    background:
+      radial-gradient(120% 140% at 100% 0%, var(--accent-soft) 0%, transparent 55%),
+      var(--surface);
+  }
+  .kind { display: inline-flex; align-items: center; gap: 8px; font-size: .88rem; font-weight: 600; color: var(--accent); }
+  .kind::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  .card h3 { font: 750 1.4rem/1.15 var(--display); letter-spacing: -.02em; margin: 0; }
+  .card.lead h3 { font-size: clamp(1.8rem, 3.6vw, 2.6rem); letter-spacing: -.03em; }
+  .card p { margin: 0; color: var(--muted); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 0; margin: 0; list-style: none; }
+  .chips li { font-size: .82rem; font-weight: 500; padding: 4px 10px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); color: var(--ink); }
+  .links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 6px; }
+  .links a {
+    display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font-weight: 600; font-size: .92rem;
+    padding: 9px 14px; border-radius: 999px; border: 1px solid var(--line); transition: background-color .2s, border-color .2s, color .2s;
+  }
+  .links a:hover { border-color: var(--accent); color: var(--accent); }
+  .links a.live { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+  .links a.live:hover { color: var(--on-accent); filter: brightness(1.08); }
+  .links svg { width: 16px; height: 16px; }
+
+  /* JurisFlow pipeline illustration */
+  .pipe { display: grid; gap: 10px; counter-reset: step; }
+  .pipe li {
+    list-style: none; display: grid; grid-template-columns: 36px 1fr; gap: 12px; align-items: center;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px;
+  }
+  .pipe li::before {
+    counter-increment: step; content: counter(step);
+    width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center;
+    background: var(--accent-soft); color: var(--accent); font: 700 1rem/1 var(--display);
+  }
+  .pipe b { display: block; font-weight: 600; font-size: .98rem; }
+  .pipe span { color: var(--muted); font-size: .88rem; }
+  .pipe { padding: 0; margin: 0; }
+
+  /* Stack */
+  .stack { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 1px solid var(--line); }
+  .stack div { padding: 22px 22px 22px 0; border-bottom: 1px solid var(--line); }
+  .stack div:not(:nth-child(3n+1)) { padding-left: 22px; border-left: 1px solid var(--line); }
+  .stack h3 { font: 700 1.05rem/1.2 var(--display); margin: 0 0 8px; }
+  .stack p { margin: 0; color: var(--muted); font-size: .97rem; }
+
+  /* Other repos */
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; }
+  .filters button {
+    font: 600 .92rem/1 var(--body); padding: 10px 16px; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--line); background: var(--surface); color: var(--muted);
+    transition: background-color .2s, color .2s, border-color .2s;
+  }
+  .filters button[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .repos { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--line); }
+  .repo {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 20px; align-items: center;
+    padding: 18px 4px; border-bottom: 1px solid var(--line);
+    transition: opacity .35s ease, transform .35s cubic-bezier(.2, .8, .2, 1);
+  }
+  .repo.out { opacity: 0; transform: translateY(6px); }
+  .repo[hidden] { display: none; }
+  .repo h3 { margin: 0; font: 650 1.12rem/1.3 var(--display); }
+  .repo h3 a { text-decoration: none; background: linear-gradient(var(--accent), var(--accent)) 0 100% / 0 2px no-repeat; transition: background-size .3s ease; }
+  .repo h3 a:hover { background-size: 100% 2px; }
+  .repo p { margin: 0; color: var(--muted); font-size: .96rem; grid-column: 1; }
+  .repo .meta { grid-column: 2; grid-row: 1 / span 2; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: end; }
+  .lang { display: inline-flex; align-items: center; gap: 7px; font-size: .86rem; color: var(--muted); white-space: nowrap; }
+  .lang i { width: 10px; height: 10px; border-radius: 50%; background: var(--c, var(--muted)); }
+  .repo .meta a { font-size: .86rem; font-weight: 600; text-decoration: none; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); white-space: nowrap; }
+  .repo .meta a:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Contact */
+  .contact { padding: clamp(72px, 10vw, 128px) 0 48px; }
+  .contact-card {
+    border-radius: 28px; padding: clamp(32px, 6vw, 64px);
+    background: var(--ink); color: var(--bg);
+    display: grid; grid-template-columns: auto 1fr; gap: clamp(24px, 5vw, 56px); align-items: center;
+    position: relative; overflow: hidden;
+  }
+  .contact-card::after {
+    content: ""; position: absolute; width: 520px; height: 520px; right: -160px; top: -220px; border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent) 55%, transparent), transparent 65%);
+    pointer-events: none;
+  }
+  .portrait { position: relative; width: clamp(150px, 22vw, 220px); aspect-ratio: 1; }
+  .portrait img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; position: relative; z-index: 1; }
+  .portrait::before {
+    content: ""; position: absolute; inset: -10px; border-radius: 50%;
+    background: conic-gradient(from 0deg, var(--accent), var(--led), var(--accent));
+    animation: spin 9s linear infinite;
+  }
+  .portrait::after { content: ""; position: absolute; inset: -4px; border-radius: 50%; background: var(--ink); }
+  @keyframes spin { to { transform: rotate(1turn); } }
+  .contact-card h2 { font: 800 clamp(2rem, 5vw, 3.4rem)/1.02 var(--display); letter-spacing: -.03em; margin: 0 0 14px; position: relative; z-index: 1; }
+  .contact-card p { margin: 0 0 26px; max-width: 48ch; color: color-mix(in srgb, var(--bg) 78%, var(--ink)); position: relative; z-index: 1; }
+  .contact-card .ctas { margin: 0; opacity: 1; animation: none; position: relative; z-index: 1; }
+  .btn.linkedin { background: #0A66C2; border-color: #0A66C2; color: #fff; padding: 16px 26px; font-size: 1.05rem; }
+  .btn.ghost { background: transparent; color: var(--bg); border-color: color-mix(in srgb, var(--bg) 35%, transparent); }
+  .btn.ghost:hover { border-color: var(--bg); }
+
+  footer { padding: 28px 0 40px; color: var(--muted); font-size: .9rem; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  footer a { color: var(--muted); }
+
+  /* Scroll reveal (one consistent treatment) */
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s cubic-bezier(.2, .8, .2, 1); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (max-width: 920px) {
+    .card, .card.half { grid-column: span 3; }
+    .card.lead { grid-template-columns: 1fr; }
+    .stack { grid-template-columns: repeat(2, 1fr); }
+    .stack div, .stack div:not(:nth-child(3n+1)) { padding: 20px 18px 20px 0; border-left: 0; }
+    .stack div:nth-child(2n) { padding-left: 18px; border-left: 1px solid var(--line); }
+  }
+  @media (max-width: 640px) {
+    body { font-size: 1rem; }
+    .grid { grid-template-columns: 1fr; gap: 14px; }
+    .card, .card.half, .card.lead { grid-column: 1; }
+    .card { padding: 22px; }
+    .stack { grid-template-columns: 1fr; }
+    .stack div, .stack div:nth-child(2n) { padding: 18px 0; border-left: 0; }
+    .repo { grid-template-columns: 1fr; }
+    .repo .meta { grid-column: 1; grid-row: auto; justify-content: start; }
+    .contact-card { grid-template-columns: 1fr; text-align: left; }
+    .node small { display: none; }
+    .btn { padding: 13px 18px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; animation-delay: 0s !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+    .pulse { display: none; }
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#projetos">Pular para os projetos</a>
+
+<header class="bar" id="topo">
+  <div class="wrap">
+    <a class="brand" href="#topo" aria-label="Guilherme Maciel, início">
+      <img src="foto.jpg" alt="" width="34" height="34" />
+      Guilherme Maciel
+    </a>
+    <nav class="nav" aria-label="Seções">
+      <a href="#projetos">Projetos</a>
+      <a class="opt" href="#stack">Stack</a>
+      <a class="opt" href="#repositorios">Repositórios</a>
+      <a href="#contato">Contato</a>
+      <button class="theme-btn" type="button" id="theme" aria-label="Alternar tema claro e escuro">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <p class="status"><span class="dot" aria-hidden="true"></span>Recife, PE · aberto a novas oportunidades</p>
+      <h1>
+        <span class="line"><span>Do sensor ao dashboard,</span></span>
+        <span class="line"><span>do PDF à peça jurídica.</span></span>
+      </h1>
+      <p class="lede">Sou <strong>Guilherme Maciel</strong>, desenvolvedor full stack e estudante na UNICAP. Construo sistemas completos com <strong>IA generativa</strong>, <strong>automação</strong> e <strong>IoT</strong>, e coloco no ar de verdade.</p>
+      <div class="ctas">
+        <a class="btn primary" href="#projetos">Ver projetos</a>
+        <a class="btn" href="https://github.com/GuilhermeADS13" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.25-1.28-5.25-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.7 5.38-5.27 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>
+          GitHub
+        </a>
+      </div>
+
+      <div class="flow" aria-label="Como meus projetos funcionam: do dado bruto ao resultado na tela">
+        <div class="flow-track">
+          <div class="wire" aria-hidden="true"></div>
+          <div class="pulse" aria-hidden="true"></div>
+          <div class="node" style="--d:.9s">
+            <span class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0Z"/></svg></span>
+            <b>Captura</b><small>Sensores ESP32, PDFs e OCR</small>
+          </div>
+          <div class="node" style="--d:1.35s">
+            <span class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="6" rx="2"/><rect x="3" y="14" width="18" height="6" rx="2"/><path d="M7 7h.01M7 17h.01"/></svg></span>
+            <b>API</b><small>FastAPI, Node e tRPC</small>
+          </div>
+          <div class="node" style="--d:1.8s">
+            <span class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9Z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8Z"/></svg></span>
+            <b>IA</b><small>Claude, RAG e n8n</small>
+          </div>
+          <div class="node" style="--d:2.25s">
+            <span class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 16v-4M12 16V8M16 16v-6"/></svg></span>
+            <b>Resultado</b><small>Dashboards e documentos prontos</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="projetos" aria-labelledby="t-projetos">
+    <div class="wrap">
+      <div class="block-head reveal">
+        <h2 id="t-projetos">Projetos em destaque</h2>
+        <p>Sistemas que resolvem problemas reais, com código aberto e demo no ar quando existe.</p>
+      </div>
+
+      <div class="grid">
+        <article class="card lead reveal">
+          <div>
+            <span class="kind">IA aplicada ao direito</span>
+            <h3 style="margin-top:12px">JurisFlow, defesa inteligente</h3>
+            <p style="margin-top:14px">Microsserviço que lê a petição inicial, recupera jurisprudência relevante e gera a contestação pronta em .docx usando a API do Claude.</p>
+            <ul class="chips" style="margin-top:18px">
+              <li>Python</li><li>FastAPI</li><li>Claude API</li><li>RAG</li><li>pgvector</li><li>n8n</li><li>Docker</li><li>Oracle Cloud</li><li>React</li>
+            </ul>
+            <div class="links" style="margin-top:22px">
+              <a class="live" href="https://api-de-automa-ao-de-contestacao.vercel.app" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>Abrir demo</a>
+              <a href="https://github.com/GuilhermeADS13/API-JURISFLOW-DEFESA-INTELIGENTE" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg>Ver código</a>
+            </div>
+          </div>
+          <ol class="pipe" aria-label="Etapas do JurisFlow">
+            <li><div><b>Lê a petição</b><span>PDF com extração de texto e OCR</span></div></li>
+            <li><div><b>Busca jurisprudência</b><span>RAG com busca vetorial no pgvector</span></div></li>
+            <li><div><b>Escreve a defesa</b><span>Claude gera a contestação fundamentada</span></div></li>
+            <li><div><b>Entrega o arquivo</b><span>Peça em .docx pronta para revisão</span></div></li>
+          </ol>
+        </article>
+
+        <article class="card half reveal">
+          <span class="kind">Saúde e IA</span>
+          <h3>SAS, atendimento psicológico</h3>
+          <p>Plataforma de atendimento por videochamada com gestão e acompanhamento de prontuários e recursos de IA.</p>
+          <ul class="chips"><li>TypeScript</li><li>React</li><li>tRPC</li><li>Supabase</li><li>Drizzle ORM</li><li>LangChain</li><li>WebRTC</li></ul>
+          <div class="links">
+            <a class="live" href="https://sas-atendimento-psicologico.onrender.com" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>Abrir demo</a>
+            <a href="https://github.com/GuilhermeADS13/SAS-AtendimentoPsicologico" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg>Ver código</a>
+          </div>
+        </article>
+
+        <article class="card half reveal">
+          <span class="kind">Tempo real</span>
+          <h3>CyberCall</h3>
+          <p>Rede social com tema cyberpunk: comunidades, mensagens, presença online via WebSocket, chamadas de voz e vídeo com WebRTC e moderação.</p>
+          <ul class="chips"><li>TypeScript</li><li>React</li><li>tRPC</li><li>Express</li><li>WebSocket</li><li>WebRTC</li><li>MySQL</li></ul>
+          <div class="links">
+            <a href="https://github.com/GuilhermeADS13/CyberCall" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg>Ver código</a>
+          </div>
+        </article>
+
+        <article class="card reveal">
+          <span class="kind">IoT</span>
+          <h3>GRAUCONST</h3>
+          <p>ESP32 lê temperatura e umidade por Bluetooth LE, envia ao Supabase e entra em deep sleep. O dashboard atualiza em tempo real e alerta no Telegram.</p>
+          <ul class="chips"><li>ESP32</li><li>C++</li><li>Supabase Realtime</li><li>React</li><li>Telegram</li></ul>
+          <div class="links">
+            <a class="live" href="https://grauconst.vercel.app" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>Demo</a>
+            <a href="https://github.com/GuilhermeADS13/GRAUCONST" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg>Código</a>
+          </div>
+        </article>
+
+        <article class="card reveal">
+          <span class="kind">Web</span>
+          <h3>Bibliotechs</h3>
+          <p>Gerenciador de leituras integrado à API do Google Books, com autenticação e testes automatizados.</p>
+          <ul class="chips"><li>React</li><li>Firebase</li><li>Tailwind</li><li>Vitest</li></ul>
+          <div class="links">
+            <a class="live" href="https://bibliotechs.vercel.app" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>Demo</a>
+            <a href="https://github.com/GuilhermeADS13/bibliotechs" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg>Código</a>
+          </div>
+        </article>
+
+        <article class="card reveal">
+          <span class="kind">Back-end</span>
+          <h3>TimeSlot</h3>
+          <p>API de reserva de salas e equipamentos para a universidade, com consulta de disponibilidade e prevenção de conflitos de horário.</p>
+          <ul class="chips"><li>Java</li><li>JavaScript</li><li>HTML</li><li>CSS</li></ul>
+          <div class="links">
+            <a href="https://github.com/GuilhermeADS13/API-AGENDAMENTO" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg>Código</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="stack" aria-labelledby="t-stack" style="padding-top:0">
+    <div class="wrap">
+      <div class="block-head reveal">
+        <h2 id="t-stack">O que eu uso</h2>
+        <p>Ferramentas que aparecem nos projetos acima, do firmware ao deploy.</p>
+      </div>
+      <div class="stack reveal">
+        <div><h3>Linguagens</h3><p>Python, TypeScript, JavaScript, Java, C e C++, SQL</p></div>
+        <div><h3>Front-end</h3><p>React, Vite, Tailwind CSS, shadcn/Radix, TanStack Query, Framer Motion</p></div>
+        <div><h3>Back-end</h3><p>FastAPI, Node.js, Express, tRPC, WebSocket, WebRTC</p></div>
+        <div><h3>Dados</h3><p>PostgreSQL, Supabase (Realtime e RLS), pgvector, MySQL, Firebase, Drizzle ORM</p></div>
+        <div><h3>IA e LLMs</h3><p>Claude API, LangChain, LlamaIndex, RAG, OCR com Tesseract, MediaPipe</p></div>
+        <div><h3>Automação</h3><p>n8n, Playwright, Selenium, BeautifulSoup</p></div>
+        <div><h3>DevOps e nuvem</h3><p>Docker, GitHub Actions, Vercel, Render, Oracle Cloud, Linux</p></div>
+        <div><h3>IoT</h3><p>ESP32, Arduino, Bluetooth LE</p></div>
+        <div><h3>Testes e design</h3><p>Vitest, Playwright, Figma</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="repositorios" aria-labelledby="t-repos" style="padding-top:0">
+    <div class="wrap">
+      <div class="block-head reveal">
+        <h2 id="t-repos">Todos os repositórios</h2>
+        <div class="filters" role="group" aria-label="Filtrar repositórios">
+          <button type="button" data-f="todos" aria-pressed="true">Todos</button>
+          <button type="button" data-f="web" aria-pressed="false">Web</button>
+          <button type="button" data-f="academico" aria-pressed="false">Acadêmicos</button>
+          <button type="button" data-f="estudo" aria-pressed="false">Estudos</button>
+        </div>
+      </div>
+
+      <ul class="repos reveal" id="repos">
+        <li class="repo" data-c="web">
+          <h3><a href="https://github.com/GuilhermeADS13/Portal-Psicologico" target="_blank" rel="noopener">Portal Psicológico</a></h3>
+          <p>Perfil profissional que reúne os links de atendimento psicológico.</p>
+          <div class="meta"><span class="lang"><i style="--c:#E9C83A"></i>JavaScript</span><a href="https://portal-psicologico.vercel.app" target="_blank" rel="noopener">Demo</a></div>
+        </li>
+        <li class="repo" data-c="web">
+          <h3><a href="https://github.com/GuilhermeADS13/-Selenium-WEB-SERVICE" target="_blank" rel="noopener">Selenium Web Service</a></h3>
+          <p>Serviço web de automação de navegador com Selenium.</p>
+          <div class="meta"><span class="lang"><i style="--c:#3572A5"></i>Python</span></div>
+        </li>
+        <li class="repo" data-c="academico">
+          <h3><a href="https://github.com/GuilhermeADS13/Grupo-Eta-Metodos-Numericos" target="_blank" rel="noopener">Métodos Numéricos, Grupo Eta</a></h3>
+          <p>Cálculo numérico da corrente elétrica em um circuito com dispositivo não linear.</p>
+          <div class="meta"><span class="lang"><i style="--c:#DA5B0B"></i>Jupyter Notebook</span></div>
+        </li>
+        <li class="repo" data-c="academico">
+          <h3><a href="https://github.com/GuilhermeADS13/CG-STEVE" target="_blank" rel="noopener">CG-STEVE</a></h3>
+          <p>Transformações geométricas 2D com Canvas, projeto de Computação Gráfica.</p>
+          <div class="meta"><span class="lang"><i style="--c:#E9C83A"></i>JavaScript</span></div>
+        </li>
+        <li class="repo" data-c="academico">
+          <h3><a href="https://github.com/GuilhermeADS13/Programacao-Estruturada" target="_blank" rel="noopener">Programação Estruturada</a></h3>
+          <p>Exercícios de programação estruturada em C.</p>
+          <div class="meta"><span class="lang"><i style="--c:#7A7F88"></i>C</span></div>
+        </li>
+        <li class="repo" data-c="academico">
+          <h3><a href="https://github.com/GuilhermeADS13/Projeto_Carros" target="_blank" rel="noopener">Projeto Carros</a></h3>
+          <p>Projeto da disciplina de Programação.</p>
+          <div class="meta"><span class="lang"><i style="--c:#3572A5"></i>Python</span></div>
+        </li>
+        <li class="repo" data-c="academico">
+          <h3><a href="https://github.com/GuilhermeADS13/ProjetoRobos" target="_blank" rel="noopener">Projeto Robôs</a></h3>
+          <p>Projeto acadêmico em Java.</p>
+          <div class="meta"><span class="lang"><i style="--c:#B07219"></i>Java</span></div>
+        </li>
+        <li class="repo" data-c="academico">
+          <h3><a href="https://github.com/GuilhermeADS13/correDoDia" target="_blank" rel="noopener">Corre do Dia</a></h3>
+          <p>Projeto de avaliação da disciplina do professor David Remígio.</p>
+          <div class="meta"></div>
+        </li>
+        <li class="repo" data-c="academico">
+          <h3><a href="https://github.com/GuilhermeADS13/Banco--de--Dados" target="_blank" rel="noopener">Banco de Dados</a></h3>
+          <p>Repositório da disciplina de Banco de Dados.</p>
+          <div class="meta"></div>
+        </li>
+        <li class="repo" data-c="estudo">
+          <h3><a href="https://github.com/GuilhermeADS13/Google_Glass_Gustavo_Gunabara" target="_blank" rel="noopener">Google Glass</a></h3>
+          <p>Site feito no curso de HTML e CSS do Gustavo Guanabara (Curso em Vídeo).</p>
+          <div class="meta"><span class="lang"><i style="--c:#E34C26"></i>HTML</span></div>
+        </li>
+        <li class="repo" data-c="estudo">
+          <h3><a href="https://github.com/GuilhermeADS13/Jogo-do-Mario" target="_blank" rel="noopener">Jogo do Mario</a></h3>
+          <p>Projeto de estudo de front-end com HTML e CSS.</p>
+          <div class="meta"><span class="lang"><i style="--c:#563D7C"></i>CSS</span></div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="contact" id="contato" aria-labelledby="t-contato">
+    <div class="wrap">
+      <div class="contact-card reveal">
+        <div class="portrait"><img src="foto.jpg" alt="Foto de Guilherme Maciel" width="220" height="220" loading="lazy" /></div>
+        <div>
+          <h2 id="t-contato">Vamos construir algo juntos?</h2>
+          <p>Estou aberto a novas oportunidades com IA, automação e desenvolvimento web. O jeito mais rápido de falar comigo é pelo LinkedIn.</p>
+          <div class="ctas">
+            <a class="btn linkedin" href="https://www.linkedin.com/in/guilherme-maciel-783688232/" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg>
+              Falar no LinkedIn
+            </a>
+            <a class="btn ghost" href="https://github.com/GuilhermeADS13" target="_blank" rel="noopener">Ver GitHub</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="ano">2026</span> Guilherme Maciel</span>
+    <a href="#topo">Voltar ao topo</a>
+  </div>
+</footer>
+
+<script>
+  // Tema claro/escuro lembrado por visitante
+  (function () {
+    var root = document.documentElement, key = "gm-theme";
+    try { var saved = localStorage.getItem(key); if (saved) root.dataset.theme = saved; } catch (e) {}
+    document.getElementById("theme").addEventListener("click", function () {
+      var dark = root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+      root.dataset.theme = dark ? "light" : "dark";
+      try { localStorage.setItem(key, root.dataset.theme); } catch (e) {}
+    });
+  })();
+
+  document.getElementById("ano").textContent = new Date().getFullYear();
+
+  // Borda da barra ao rolar
+  var bar = document.querySelector(".bar");
+  addEventListener("scroll", function () { bar.classList.toggle("scrolled", scrollY > 8); }, { passive: true });
+
+  // Revelar ao rolar
+  var items = document.querySelectorAll(".reveal");
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: .08 });
+    items.forEach(function (el) { io.observe(el); });
+  } else { items.forEach(function (el) { el.classList.add("in"); }); }
+
+  // Filtro de repositórios com transição
+  var buttons = document.querySelectorAll(".filters button");
+  var repos = document.querySelectorAll(".repo");
+  buttons.forEach(function (b) {
+    b.addEventListener("click", function () {
+      var f = b.dataset.f;
+      buttons.forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      repos.forEach(function (r) {
+        var show = f === "todos" || r.dataset.c === f;
+        if (show) {
+          r.hidden = false;
+          r.classList.add("out");
+          requestAnimationFrame(function () { requestAnimationFrame(function () { r.classList.remove("out"); }); });
+        } else {
+          r.classList.add("out");
+          setTimeout(function () { if (r.classList.contains("out")) r.hidden = true; }, 300);
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>
