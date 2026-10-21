@@ -206,12 +206,13 @@
   .tabbar button { position: relative; flex: none; font: 600 .78rem/1 var(--body); color: var(--muted); background: transparent; border: 0; border-radius: 8px; padding: 8px 12px; cursor: pointer; transition: color .2s, background-color .2s; }
   .tabbar button:hover { color: var(--ink); background: var(--surface); }
   .tabbar button[aria-selected="true"] { color: var(--ink); background: var(--surface); }
-  .tabbar button[aria-selected="true"]::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: 3px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, var(--accent), var(--led)); transform-origin: left; animation: tabtime var(--tab-ms, 5000ms) linear forwards; }
-  .tabs-shot.paused .tabbar button[aria-selected="true"]::after { animation: none; transform: scaleX(1); }
-  @keyframes tabtime { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  .tabbar button[aria-selected="true"]::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: 3px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, var(--accent), var(--led)); transform-origin: left; transform: scaleX(var(--p, 1)); }
   .tab-screens { position: relative; aspect-ratio: 16 / 10; background: #0b0b0d; overflow: hidden; }
-  .tab-screens img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; opacity: 0; transform: scale(1.015); transition: opacity .6s ease, transform .9s var(--ease); }
-  .tab-screens img.on { opacity: 1; transform: none; }
+  .pane { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; opacity: 0; visibility: hidden; transition: opacity .6s ease, visibility 0s .6s; scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, .25) transparent; }
+  .pane.on { opacity: 1; visibility: visible; transition: opacity .6s ease, visibility 0s; }
+  .pane img { display: block; width: 100%; height: auto; }
+  .pane::-webkit-scrollbar { width: 6px; }
+  .pane::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, .25); border-radius: 6px; }
 
   .phones { position: relative; display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-end; padding-top: 8px; }
   .phone { position: relative; width: min(250px, 46%); aspect-ratio: 458 / 988; padding: 8px; border-radius: 34px; background: #0B1220; border: 1px solid var(--line); box-shadow: var(--shadow); }
@@ -564,13 +565,13 @@
                 <button type="button" role="tab" aria-selected="false">Suporte</button>
               </div>
               <div class="tab-screens">
-                <img class="on" src="shots/jf-inicio.webp" width="1200" height="750" loading="lazy" decoding="async" alt="Início do JurisFlow com o painel de automação de defesas em quatro etapas" />
-                <img src="shots/jf-formulario.webp" width="1200" height="750" loading="lazy" decoding="async" alt="Formulário IA do JurisFlow para enviar a petição inicial e o modelo do escritório" />
-                <img src="shots/jf-dashboard.webp" width="1200" height="750" loading="lazy" decoding="async" alt="Dashboard do JurisFlow com totais de casos, status da automação e histórico das defesas" />
-                <img src="shots/jf-suporte.webp" width="1200" height="750" loading="lazy" decoding="async" alt="Canal de suporte do JurisFlow com formulário de reclamação e checklist" />
+                <div class="pane on"><img src="shots/jf-inicio.webp" width="1200" height="1754" loading="lazy" decoding="async" alt="Início do JurisFlow com o painel de automação de defesas em quatro etapas e as métricas da plataforma" /></div>
+                <div class="pane" aria-hidden="true"><img src="shots/jf-formulario.webp" width="1200" height="1638" loading="lazy" decoding="async" alt="Formulário IA do JurisFlow para enviar a petição inicial, o modelo do escritório e os pontos da defesa" /></div>
+                <div class="pane" aria-hidden="true"><img src="shots/jf-dashboard.webp" width="1200" height="1121" loading="lazy" decoding="async" alt="Dashboard do JurisFlow com totais de casos, status da automação e histórico das defesas" /></div>
+                <div class="pane" aria-hidden="true"><img src="shots/jf-suporte.webp" width="1200" height="1304" loading="lazy" decoding="async" alt="Canal de suporte do JurisFlow com formulário de reclamação e checklist" /></div>
               </div>
             </div>
-            <figcaption>Telas reais do sistema. Clique nas abas para trocar.</figcaption>
+            <figcaption>Telas reais do sistema. Clique nas abas ou role a tela para ver tudo.</figcaption>
           </figure>
           <div class="reveal">
             <div class="case-meta">IA aplicada ao direito <span class="pill">Projeto principal</span></div>
@@ -824,31 +825,68 @@
       });
     }
 
-    // Abas com telas reais (troca automática, pausa ao interagir)
+    // Abas com telas reais: cada aba rola até o fim e passa para a próxima.
+    // Ao passar o mouse, tocar ou rolar, a automação pausa e a pessoa navega sozinha.
     document.querySelectorAll("[data-tabs]").forEach(function (box) {
-      var tabs = box.querySelectorAll("[role=tab]"), imgs = box.querySelectorAll(".tab-screens img");
-      var i = 0, timer = null, visible = false, hold = false, ms = 5000;
+      var tabs = box.querySelectorAll("[role=tab]"), panes = box.querySelectorAll(".pane");
       var still = matchMedia("(prefers-reduced-motion: reduce)").matches;
-      box.style.setProperty("--tab-ms", ms + "ms");
-      function show(n) {
+      var i = 0, visible = false, hover = false, last = -1e9, phase = "top", start = 0, from = 0, to = 0, dur = 0, expected = 0, resume = false;
+      var TOP = 1300, BOTTOM = 1700, SPEED = 0.085;
+      function pane() { return panes[i]; }
+      function setP(p) { tabs[i].style.setProperty("--p", Math.max(0, Math.min(1, p)).toFixed(3)); }
+      function show(n, now) {
         i = (n + tabs.length) % tabs.length;
-        tabs.forEach(function (t, k) { t.setAttribute("aria-selected", String(k === i)); });
-        imgs.forEach(function (im, k) { im.classList.toggle("on", k === i); });
+        tabs.forEach(function (t, k) { t.setAttribute("aria-selected", String(k === i)); t.tabIndex = k === i ? 0 : -1; });
+        panes.forEach(function (p, k) { p.classList.toggle("on", k === i); p.setAttribute("aria-hidden", String(k !== i)); });
+        expected = 0; pane().scrollTop = 0;
+        phase = "top"; start = now || performance.now(); setP(still ? 1 : 0);
       }
-      function stop() { clearInterval(timer); timer = null; }
-      function start() { if (still || hold || !visible || timer) return; timer = setInterval(function () { show(i + 1); }, ms); }
+      function touch() { last = performance.now(); resume = true; }
       tabs.forEach(function (t, k) {
-        t.addEventListener("click", function () { hold = true; box.classList.add("paused"); stop(); show(k); });
+        t.addEventListener("click", function () { show(k); touch(); });
         t.addEventListener("keydown", function (e) {
-          if (e.key === "ArrowRight" || e.key === "ArrowLeft") { e.preventDefault(); hold = true; box.classList.add("paused"); stop(); show(i + (e.key === "ArrowRight" ? 1 : -1)); tabs[i].focus(); }
+          if (e.key === "ArrowRight" || e.key === "ArrowLeft") { e.preventDefault(); show(i + (e.key === "ArrowRight" ? 1 : -1)); tabs[i].focus(); touch(); }
         });
       });
-      box.addEventListener("pointerenter", function () { stop(); box.classList.add("paused"); });
-      box.addEventListener("pointerleave", function () { if (!hold) { box.classList.remove("paused"); show(i); start(); } });
-      if (still) box.classList.add("paused");
+      box.addEventListener("pointerenter", function (e) { if (e.pointerType === "mouse") hover = true; touch(); });
+      box.addEventListener("pointerleave", function (e) { if (e.pointerType === "mouse") hover = false; touch(); });
+      panes.forEach(function (p) {
+        ["wheel", "touchstart", "touchmove"].forEach(function (ev) { p.addEventListener(ev, touch, { passive: true }); });
+        p.addEventListener("scroll", function () { if (p === pane() && Math.abs(p.scrollTop - expected) > 3) touch(); }, { passive: true });
+      });
+      if (still) { setP(1); return; }
+
+      function tick(now) {
+        requestAnimationFrame(tick);
+        if (!visible) return;
+        if (hover || now - last < 3200) return;
+        var p = pane(), max = p.scrollHeight - p.clientHeight;
+        if (resume) {
+          resume = false;
+          if (p.scrollTop < max - 4) { phase = "scroll"; from = p.scrollTop; to = max; dur = Math.max(1200, (to - from) / SPEED); start = now; }
+          else { phase = "bottom"; start = now; }
+        }
+        var t = now - start;
+        if (phase === "top") {
+          setP(.12 * t / TOP);
+          if (t >= TOP) { phase = "scroll"; from = p.scrollTop; to = max; dur = Math.max(1600, (to - from) / SPEED); start = now; }
+        } else if (phase === "scroll") {
+          var k = Math.min(t / dur, 1), e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+          expected = from + (to - from) * e; p.scrollTop = expected;
+          setP(.12 + .76 * k);
+          if (k >= 1) { phase = "bottom"; start = now; }
+        } else {
+          setP(.88 + .12 * t / BOTTOM);
+          if (t >= BOTTOM) show(i + 1, now);
+        }
+      }
       if ("IntersectionObserver" in window) {
-        new IntersectionObserver(function (es) { visible = es[0].isIntersecting; visible ? start() : stop(); }, { threshold: .35 }).observe(box);
-      } else { visible = true; start(); }
+        new IntersectionObserver(function (es) {
+          var was = visible; visible = es[0].isIntersecting;
+          if (visible && !was) { phase = "top"; start = performance.now(); }
+        }, { threshold: .35 }).observe(box);
+      } else { visible = true; }
+      requestAnimationFrame(tick);
     });
 
     // Contagem animada dos números
