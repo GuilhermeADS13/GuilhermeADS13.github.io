@@ -200,6 +200,19 @@
   .shot.real:hover .screen img { animation-play-state: paused; }
   @keyframes pan { 0%, 8% { object-position: 50% 0%; } 46%, 54% { object-position: 50% 100%; } 92%, 100% { object-position: 50% 0%; } }
 
+  .tabs-shot .win { aspect-ratio: auto; }
+  .tabbar { display: flex; gap: 4px; padding: 6px 8px; background: var(--bg-2); border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: none; }
+  .tabbar::-webkit-scrollbar { display: none; }
+  .tabbar button { position: relative; flex: none; font: 600 .78rem/1 var(--body); color: var(--muted); background: transparent; border: 0; border-radius: 8px; padding: 8px 12px; cursor: pointer; transition: color .2s, background-color .2s; }
+  .tabbar button:hover { color: var(--ink); background: var(--surface); }
+  .tabbar button[aria-selected="true"] { color: var(--ink); background: var(--surface); }
+  .tabbar button[aria-selected="true"]::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: 3px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, var(--accent), var(--led)); transform-origin: left; animation: tabtime var(--tab-ms, 5000ms) linear forwards; }
+  .tabs-shot.paused .tabbar button[aria-selected="true"]::after { animation: none; transform: scaleX(1); }
+  @keyframes tabtime { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  .tab-screens { position: relative; aspect-ratio: 16 / 10; background: #0b0b0d; overflow: hidden; }
+  .tab-screens img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; opacity: 0; transform: scale(1.015); transition: opacity .6s ease, transform .9s var(--ease); }
+  .tab-screens img.on { opacity: 1; transform: none; }
+
   .phones { position: relative; display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-end; padding-top: 8px; }
   .phone { position: relative; width: min(250px, 46%); aspect-ratio: 458 / 988; padding: 8px; border-radius: 34px; background: #0B1220; border: 1px solid var(--line); box-shadow: var(--shadow); }
   .phone::before { content: ""; position: absolute; top: 14px; left: 50%; width: 22%; height: 5px; margin-left: -11%; border-radius: 4px; background: #1d2638; z-index: 2; opacity: .9; }
@@ -541,14 +554,23 @@
 
       <div class="cases">
         <article class="case">
-          <figure class="shot real reveal">
+          <figure class="shot real tabs-shot reveal" data-tabs>
             <div class="win">
               <div class="win-bar"><i></i><i></i><i></i><span>jurisflow-contestacao.vercel.app</span></div>
-              <div class="win-body screen">
-                <img src="shots/jurisflow.webp" width="786" height="1668" loading="lazy" decoding="async" alt="Página inicial do JurisFlow com o painel de automação de defesas em quatro etapas e as métricas da plataforma" />
+              <div class="tabbar" role="tablist" aria-label="Telas do JurisFlow">
+                <button type="button" role="tab" aria-selected="true">Início</button>
+                <button type="button" role="tab" aria-selected="false">Formulário IA</button>
+                <button type="button" role="tab" aria-selected="false">Dashboard</button>
+                <button type="button" role="tab" aria-selected="false">Suporte</button>
+              </div>
+              <div class="tab-screens">
+                <img class="on" src="shots/jf-inicio.webp" width="1200" height="750" loading="lazy" decoding="async" alt="Início do JurisFlow com o painel de automação de defesas em quatro etapas" />
+                <img src="shots/jf-formulario.webp" width="1200" height="750" loading="lazy" decoding="async" alt="Formulário IA do JurisFlow para enviar a petição inicial e o modelo do escritório" />
+                <img src="shots/jf-dashboard.webp" width="1200" height="750" loading="lazy" decoding="async" alt="Dashboard do JurisFlow com totais de casos, status da automação e histórico das defesas" />
+                <img src="shots/jf-suporte.webp" width="1200" height="750" loading="lazy" decoding="async" alt="Canal de suporte do JurisFlow com formulário de reclamação e checklist" />
               </div>
             </div>
-            <figcaption>Tela real do sistema no ar</figcaption>
+            <figcaption>Telas reais do sistema. Clique nas abas para trocar.</figcaption>
           </figure>
           <div class="reveal">
             <div class="case-meta">IA aplicada ao direito <span class="pill">Projeto principal</span></div>
@@ -801,6 +823,33 @@
         s.addEventListener("pointerleave", function () { s.style.setProperty("--ry", "0deg"); s.style.setProperty("--rx", "0deg"); });
       });
     }
+
+    // Abas com telas reais (troca automática, pausa ao interagir)
+    document.querySelectorAll("[data-tabs]").forEach(function (box) {
+      var tabs = box.querySelectorAll("[role=tab]"), imgs = box.querySelectorAll(".tab-screens img");
+      var i = 0, timer = null, visible = false, hold = false, ms = 5000;
+      var still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      box.style.setProperty("--tab-ms", ms + "ms");
+      function show(n) {
+        i = (n + tabs.length) % tabs.length;
+        tabs.forEach(function (t, k) { t.setAttribute("aria-selected", String(k === i)); });
+        imgs.forEach(function (im, k) { im.classList.toggle("on", k === i); });
+      }
+      function stop() { clearInterval(timer); timer = null; }
+      function start() { if (still || hold || !visible || timer) return; timer = setInterval(function () { show(i + 1); }, ms); }
+      tabs.forEach(function (t, k) {
+        t.addEventListener("click", function () { hold = true; box.classList.add("paused"); stop(); show(k); });
+        t.addEventListener("keydown", function (e) {
+          if (e.key === "ArrowRight" || e.key === "ArrowLeft") { e.preventDefault(); hold = true; box.classList.add("paused"); stop(); show(i + (e.key === "ArrowRight" ? 1 : -1)); tabs[i].focus(); }
+        });
+      });
+      box.addEventListener("pointerenter", function () { stop(); box.classList.add("paused"); });
+      box.addEventListener("pointerleave", function () { if (!hold) { box.classList.remove("paused"); show(i); start(); } });
+      if (still) box.classList.add("paused");
+      if ("IntersectionObserver" in window) {
+        new IntersectionObserver(function (es) { visible = es[0].isIntersecting; visible ? start() : stop(); }, { threshold: .35 }).observe(box);
+      } else { visible = true; start(); }
+    });
 
     // Contagem animada dos números
     var counters = document.querySelectorAll("[data-count]");
