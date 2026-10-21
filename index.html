@@ -189,6 +189,30 @@
   .win-bar i { width: 9px; height: 9px; border-radius: 50%; background: var(--line); }
   .win-bar span { margin-left: 10px; font-size: .72rem; color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .win-body { flex: 1; position: relative; padding: 14px; display: grid; gap: 10px; min-height: 0; }
+
+  /* Telas reais */
+  figure.shot, figure.phones { margin: 0; }
+  .shot figcaption, .phones figcaption { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 12px; font-size: .85rem; color: var(--faint); width: 100%; }
+  .shot figcaption::before, .phones figcaption::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--ok); }
+  .win-body.screen { padding: 0; display: block; overflow: hidden; background: #0b0b0d; }
+  .screen img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 0%; }
+  .in .screen img { animation: pan 24s ease-in-out 1.2s infinite; }
+  .shot.real:hover .screen img { animation-play-state: paused; }
+  @keyframes pan { 0%, 8% { object-position: 50% 0%; } 46%, 54% { object-position: 50% 100%; } 92%, 100% { object-position: 50% 0%; } }
+
+  .phones { position: relative; display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-end; padding-top: 8px; }
+  .phone { position: relative; width: min(250px, 46%); aspect-ratio: 458 / 988; padding: 8px; border-radius: 34px; background: #0B1220; border: 1px solid var(--line); box-shadow: var(--shadow); }
+  .phone::before { content: ""; position: absolute; top: 14px; left: 50%; width: 22%; height: 5px; margin-left: -11%; border-radius: 4px; background: #1d2638; z-index: 2; opacity: .9; }
+  .phone img { width: 100%; height: 100%; object-fit: cover; object-position: top; border-radius: 26px; }
+  .phone.back { transform: translateX(16%) rotate(-5deg) scale(.88); transform-origin: bottom right; z-index: 0; filter: saturate(.9); }
+  .phone.front { transform: translateX(-8%); z-index: 1; }
+  .slides { position: relative; width: 100%; height: 100%; border-radius: 26px; overflow: hidden; background: #FCF8F3; }
+  .slides img { position: absolute; inset: 0; opacity: 0; border-radius: 0; }
+  .slides img:first-child { opacity: 1; }
+  .in .slides img { animation: slide3 12s ease-in-out infinite; }
+  .in .slides img:nth-child(2) { animation-delay: 4s; }
+  .in .slides img:nth-child(3) { animation-delay: 8s; }
+  @keyframes slide3 { 0%, 30% { opacity: 1; } 34%, 96% { opacity: 0; } 100% { opacity: 1; } }
   .ln { height: 7px; border-radius: 4px; background: var(--line); }
   .ln.w9 { width: 90%; } .ln.w7 { width: 70%; } .ln.w8 { width: 80%; } .ln.w5 { width: 50%; } .ln.w6 { width: 60%; }
 
@@ -377,7 +401,7 @@
     .head, .about { grid-template-columns: 1fr; }
     .filters { justify-self: start; }
     .case { grid-template-columns: 1fr; }
-    .case .shot, .case:nth-child(even) .shot { order: -1; }
+    .case .shot, .case:nth-child(even) .shot, .case .phones { order: -1; }
     .stack { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 640px) {
@@ -517,24 +541,15 @@
 
       <div class="cases">
         <article class="case">
-          <div class="shot reveal" aria-hidden="true">
+          <figure class="shot real reveal">
             <div class="win">
-              <div class="win-bar"><i></i><i></i><i></i><span>jurisflow · gerar contestação</span></div>
-              <div class="win-body jf">
-                <div class="doc">
-                  <b>Petição inicial <em>PDF</em></b>
-                  <div class="ln w9"></div><div class="ln w8"></div><div class="ln w9"></div><div class="ln w6"></div><div class="ln w8"></div><div class="ln w7"></div><div class="ln w9"></div><div class="ln w5"></div>
-                  <div class="scan"></div>
-                </div>
-                <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
-                <div class="doc out">
-                  <b>Contestação <em>DOCX</em></b>
-                  <div class="ln w9"></div><div class="ln w8"></div><div class="ln w9"></div><div class="ln w7"></div><div class="ln w9"></div><div class="ln w6"></div>
-                  <span class="cite">Jurisprudência citada</span>
-                </div>
+              <div class="win-bar"><i></i><i></i><i></i><span>jurisflow-contestacao.vercel.app</span></div>
+              <div class="win-body screen">
+                <img src="shots/jurisflow.webp" width="786" height="1668" loading="lazy" decoding="async" alt="Página inicial do JurisFlow com o painel de automação de defesas em quatro etapas e as métricas da plataforma" />
               </div>
             </div>
-          </div>
+            <figcaption>Tela real do sistema no ar</figcaption>
+          </figure>
           <div class="reveal">
             <div class="case-meta">IA aplicada ao direito <span class="pill">Projeto principal</span></div>
             <h3>JurisFlow</h3>
@@ -587,20 +602,19 @@
         </article>
 
         <article class="case">
-          <div class="shot reveal" aria-hidden="true">
-            <div class="win">
-              <div class="win-bar"><i></i><i></i><i></i><span>vozinterior · sessão de atendimento</span></div>
-              <div class="win-body sas">
-                <div class="call"><span class="rec">Em sessão</span><div class="avatar"></div><div class="self"></div><div class="ctrls"><i></i><i></i><i></i></div></div>
-                <div class="chart">
-                  <b>Prontuário</b>
-                  <div class="note"><small>Sessão anterior</small><div class="ln w9"></div><div class="ln w7"></div></div>
-                  <div class="note"><small>Evolução</small><div class="ln w8"></div><div class="ln w5"></div></div>
-                  <div class="note ai"><small>Documentos</small><div class="ln w9"></div><div class="ln w6"></div></div>
-                </div>
+          <figure class="phones reveal">
+            <div class="phone back">
+              <img src="shots/voz-luma.webp" width="458" height="988" loading="lazy" decoding="async" alt="Luma, assistente de IA do VozInterior, respondendo dentro do escopo de um paciente" />
+            </div>
+            <div class="phone front">
+              <div class="slides">
+                <img src="shots/voz-painel.webp" width="458" height="988" loading="lazy" decoding="async" alt="Painel do VozInterior com consultas do dia, pacientes, atendimentos do mês e próximas consultas" />
+                <img src="shots/voz-agenda.webp" width="458" height="988" loading="lazy" decoding="async" alt="Tela de agendamentos do VozInterior com filtros por situação e pagamento" />
+                <img src="shots/voz-prontuarios.webp" width="458" height="988" loading="lazy" decoding="async" alt="Lista de pacientes e prontuários do VozInterior com aviso de itens pendentes" />
               </div>
             </div>
-          </div>
+            <figcaption>Telas reais com uma conta de teste</figcaption>
+          </figure>
           <div class="reveal">
             <div class="case-meta">Saúde e IA <span class="pill">No ar</span></div>
             <h3>VozInterior</h3>
