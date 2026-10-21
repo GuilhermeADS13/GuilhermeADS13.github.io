@@ -14,8 +14,8 @@
 <meta property="og:description" content="Do sensor ao dashboard, do PDF à peça jurídica. Projetos com IA, automação, IoT e web." />
 <meta property="og:image" content="https://guilhermeads13.github.io/foto.jpg" />
 <meta name="twitter:card" content="summary" />
-<meta property="og:image:width" content="360" />
-<meta property="og:image:height" content="360" />
+<meta property="og:image:width" content="420" />
+<meta property="og:image:height" content="420" />
 <meta property="og:image:alt" content="Foto de Guilherme Maciel" />
 <meta name="author" content="Guilherme Maciel" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%233D63F0'/%3E%3Ctext x='50%25' y='56%25' text-anchor='middle' dominant-baseline='middle' font-family='Arial' font-weight='700' font-size='30' fill='white'%3EGM%3C/text%3E%3C/svg%3E" />
@@ -23,7 +23,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
-<link rel="preload" as="image" href="foto.jpg" />
+<link rel="preload" as="image" href="foto-retrato.jpg" />
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Person","name":"Guilherme Maciel","jobTitle":"Desenvolvedor Full Stack","url":"https://guilhermeads13.github.io/","image":"https://guilhermeads13.github.io/foto.jpg","address":{"@type":"PostalAddress","addressLocality":"Recife","addressRegion":"PE","addressCountry":"BR"},"telephone":"+55-81-99241-9511","alumniOf":{"@type":"CollegeOrUniversity","name":"Universidade Católica de Pernambuco"},"knowsAbout":["Ciência da Computação","Desenvolvimento Full Stack","IA generativa","RAG","IoT"],"sameAs":["https://github.com/GuilhermeADS13","https://www.linkedin.com/in/guilherme-maciel-783688232/","https://www.instagram.com/guilherme_santos1.3/"]}
 </script>
@@ -124,8 +124,8 @@
   .btn svg { width: 18px; height: 18px; flex: none; }
 
   .portrait-card { position: relative; justify-self: center; width: min(360px, 100%); }
-  .portrait { position: relative; aspect-ratio: 1; border-radius: 34% 66% 58% 42% / 42% 38% 62% 58%; overflow: hidden; border: 1px solid var(--line); box-shadow: var(--shadow); animation: morph 14s ease-in-out infinite; }
-  .portrait img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.04); }
+  .portrait { position: relative; aspect-ratio: 4 / 5; border-radius: 34% 66% 58% 42% / 42% 38% 62% 58%; overflow: hidden; border: 1px solid var(--line); box-shadow: var(--shadow); animation: morph 14s ease-in-out infinite; }
+  .portrait img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; transform: scale(1.02); }
   @keyframes morph { 0%, 100% { border-radius: 34% 66% 58% 42% / 42% 38% 62% 58%; } 50% { border-radius: 58% 42% 36% 64% / 56% 62% 38% 44%; } }
   .tag { position: absolute; display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 14px; background: color-mix(in srgb, var(--surface) 88%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border: 1px solid var(--line); font-size: .88rem; font-weight: 600; box-shadow: var(--shadow); white-space: nowrap; animation: float 6s ease-in-out infinite; }
   .tag i { width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); font-style: normal; }
@@ -497,7 +497,7 @@
       </div>
 
       <div class="portrait-card appear" style="--d:.3s">
-        <div class="portrait"><img src="foto.jpg" alt="Foto de Guilherme Maciel" width="360" height="360" /></div>
+        <div class="portrait"><img src="foto-retrato.jpg" alt="Foto de Guilherme Maciel" width="480" height="600" fetchpriority="high" /></div>
         <span class="tag t1" aria-hidden="true"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.6 4.6 1.9-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9Z"/></svg></i>IA generativa</span>
         <span class="tag t2" aria-hidden="true"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0Z"/></svg></i>IoT com ESP32</span>
         <span class="tag t3" aria-hidden="true"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h10M4 12h16M4 17h7"/><circle cx="17" cy="7" r="2"/><circle cx="14" cy="17" r="2"/></svg></i>Automação n8n</span>
@@ -725,7 +725,7 @@
   <section class="contact" id="contato" aria-labelledby="t-contato">
     <div class="wrap">
       <div class="cta reveal">
-        <div class="cta-photo"><img src="foto.jpg" alt="Foto de Guilherme Maciel" width="210" height="210" loading="lazy" /></div>
+        <div class="cta-photo"><img src="foto.jpg?v=2" alt="Foto de Guilherme Maciel" width="210" height="210" loading="lazy" /></div>
         <div>
           <h2 id="t-contato">Vamos conversar?</h2>
           <p>Estou aberto a novas oportunidades com IA, automação e desenvolvimento web. Fale comigo pelo canal que preferir.</p>
