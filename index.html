@@ -565,10 +565,10 @@
                 <button type="button" role="tab" aria-selected="false">Suporte</button>
               </div>
               <div class="tab-screens">
-                <div class="pane on"><img src="shots/jf-inicio.webp" width="1200" height="1754" loading="lazy" decoding="async" alt="Início do JurisFlow com o painel de automação de defesas em quatro etapas e as métricas da plataforma" /></div>
-                <div class="pane" aria-hidden="true"><img src="shots/jf-formulario.webp" width="1200" height="1638" loading="lazy" decoding="async" alt="Formulário IA do JurisFlow para enviar a petição inicial, o modelo do escritório e os pontos da defesa" /></div>
-                <div class="pane" aria-hidden="true"><img src="shots/jf-dashboard.webp" width="1200" height="1121" loading="lazy" decoding="async" alt="Dashboard do JurisFlow com totais de casos, status da automação e histórico das defesas" /></div>
-                <div class="pane" aria-hidden="true"><img src="shots/jf-suporte.webp" width="1200" height="1304" loading="lazy" decoding="async" alt="Canal de suporte do JurisFlow com formulário de reclamação e checklist" /></div>
+                <div class="pane on"><img src="shots/jf-inicio.webp?v=3" width="1200" height="1754" loading="lazy" decoding="async" alt="Início do JurisFlow com o painel de automação de defesas em quatro etapas e as métricas da plataforma" /></div>
+                <div class="pane" aria-hidden="true"><img src="shots/jf-formulario.webp?v=3" width="1200" height="1638" loading="lazy" decoding="async" alt="Formulário IA do JurisFlow para enviar a petição inicial, o modelo do escritório e os pontos da defesa" /></div>
+                <div class="pane" aria-hidden="true"><img src="shots/jf-dashboard.webp?v=3" width="1200" height="1121" loading="lazy" decoding="async" alt="Dashboard do JurisFlow com totais de casos, status da automação e histórico das defesas" /></div>
+                <div class="pane" aria-hidden="true"><img src="shots/jf-suporte.webp?v=3" width="1200" height="1304" loading="lazy" decoding="async" alt="Canal de suporte do JurisFlow com formulário de reclamação e checklist" /></div>
               </div>
             </div>
             <figcaption>Telas reais do sistema. Clique nas abas ou role a tela para ver tudo.</figcaption>
@@ -848,8 +848,6 @@
           if (e.key === "ArrowRight" || e.key === "ArrowLeft") { e.preventDefault(); show(i + (e.key === "ArrowRight" ? 1 : -1)); tabs[i].focus(); touch(); }
         });
       });
-      box.addEventListener("pointerenter", function (e) { if (e.pointerType === "mouse") hover = true; touch(); });
-      box.addEventListener("pointerleave", function (e) { if (e.pointerType === "mouse") hover = false; touch(); });
       panes.forEach(function (p) {
         ["wheel", "touchstart", "touchmove"].forEach(function (ev) { p.addEventListener(ev, touch, { passive: true }); });
         p.addEventListener("scroll", function () { if (p === pane() && Math.abs(p.scrollTop - expected) > 3) touch(); }, { passive: true });
@@ -859,7 +857,7 @@
       function tick(now) {
         requestAnimationFrame(tick);
         if (!visible) return;
-        if (hover || now - last < 3200) return;
+        if (now - last < 3500) return;
         var p = pane(), max = p.scrollHeight - p.clientHeight;
         if (resume) {
           resume = false;
@@ -871,6 +869,7 @@
           setP(.12 * t / TOP);
           if (t >= TOP) { phase = "scroll"; from = p.scrollTop; to = max; dur = Math.max(1600, (to - from) / SPEED); start = now; }
         } else if (phase === "scroll") {
+          to = max;
           var k = Math.min(t / dur, 1), e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
           expected = from + (to - from) * e; p.scrollTop = expected;
           setP(.12 + .76 * k);
@@ -883,7 +882,10 @@
       if ("IntersectionObserver" in window) {
         new IntersectionObserver(function (es) {
           var was = visible; visible = es[0].isIntersecting;
-          if (visible && !was) { phase = "top"; start = performance.now(); }
+          if (visible && !was) {
+            box.querySelectorAll(".pane img").forEach(function (im) { im.loading = "eager"; });
+            if (phase === "top") start = performance.now();
+          }
         }, { threshold: .35 }).observe(box);
       } else { visible = true; }
       requestAnimationFrame(tick);
